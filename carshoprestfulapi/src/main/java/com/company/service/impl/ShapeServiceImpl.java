@@ -42,4 +42,10 @@ public class ShapeServiceImpl implements ShapeServiceInter
     {
         shapeRepository.delete(shape);
     }
+
+    @Override
+    public Shape getByForm(String form)
+    {
+        return shapeRepository.findByForm(form);
+    }
 }

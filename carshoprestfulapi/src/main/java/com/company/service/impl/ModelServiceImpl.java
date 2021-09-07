@@ -43,5 +43,11 @@ public class ModelServiceImpl implements ModelServiceInter
     {
         modelRepository.delete(model);
     }
+
+    @Override
+    public Model getByName(String name)
+    {
+        return modelRepository.findByName(name);
+    }
     
 }

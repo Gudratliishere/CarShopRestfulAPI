@@ -42,6 +42,12 @@ public class CarsServiceImpl implements CarsServiceInter
     {
         carsRepository.delete(cars);
     }
+
+    @Override
+    public Cars getByNumber(String number)
+    {
+        return carsRepository.findByNumber(number);
+    }
     
     
 }

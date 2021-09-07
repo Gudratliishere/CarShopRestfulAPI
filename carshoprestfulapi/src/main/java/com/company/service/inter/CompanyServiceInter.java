@@ -13,6 +13,8 @@ public interface CompanyServiceInter
     
     Company getById (Integer id);
     
+    Company getByName (String name);
+    
     Company saveCompany (Company company);
     
     void removeCompany (Company company);

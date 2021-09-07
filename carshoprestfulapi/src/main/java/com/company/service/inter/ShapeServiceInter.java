@@ -13,6 +13,8 @@ public interface ShapeServiceInter
     
     Shape getById (Integer id);
     
+    Shape getByForm (String form);
+    
     Shape saveShape (Shape shape);
     
     void removeShape (Shape shape);

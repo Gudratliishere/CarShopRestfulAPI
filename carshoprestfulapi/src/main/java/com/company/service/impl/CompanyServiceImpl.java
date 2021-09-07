@@ -44,4 +44,10 @@ public class CompanyServiceImpl implements CompanyServiceInter
         companyRepository.delete(company);
     }
 
+    @Override
+    public Company getByName(String name)
+    {
+        return companyRepository.findByName(name);
+    }
+
 }

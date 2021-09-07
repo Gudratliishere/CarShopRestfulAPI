@@ -13,6 +13,8 @@ public interface CarsServiceInter
     
     Cars getById (Integer id);
     
+    Cars getByNumber (String number);
+    
     Cars saveCars (Cars cars);
     
     void removeCars (Cars cars);

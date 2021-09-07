@@ -43,4 +43,10 @@ public class ColorServiceImpl implements ColorServiceInter
         colorRepository.delete(color);
     }
 
+    @Override
+    public Color getByName(String name)
+    {
+        return colorRepository.findByName(name);
+    }
+
 }

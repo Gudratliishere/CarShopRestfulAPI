@@ -3,6 +3,8 @@ package com.company.dto;
 import com.company.entity.Cars;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -20,6 +22,11 @@ public class CarsDTO
     private ModelDTO model;
     private ColorDTO color;
     private ShapeDTO shape;
+    
+    public CarsDTO (String number)
+    {
+        this.number = number;
+    }
     
     public static CarsDTO of (Cars cars)
     {

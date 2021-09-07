@@ -13,6 +13,8 @@ public interface ModelServiceInter
     
     Model getById (Integer id);
     
+    Model getByName (String name);
+    
     Model saveModel (Model model);
     
     void removeModel (Model model);

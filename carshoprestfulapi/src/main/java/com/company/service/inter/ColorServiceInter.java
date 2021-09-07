@@ -13,6 +13,8 @@ public interface ColorServiceInter
     
     Color getById (Integer id);
     
+    Color getByName (String name);
+    
     Color saveColor (Color color);
     
     void removeColor (Color color);
