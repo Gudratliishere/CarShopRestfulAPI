@@ -34,6 +34,7 @@ public class Shape implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "form")
     private String form;
     @OneToMany(mappedBy = "shape")

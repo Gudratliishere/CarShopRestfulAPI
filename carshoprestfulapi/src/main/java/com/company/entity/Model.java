@@ -38,10 +38,12 @@ public class Model implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "name")
     private String name;
     @OneToMany(mappedBy = "model")
     private List<Cars> carsList;
+    @Basic(optional = false)
     @JoinColumn(name = "company", referencedColumnName = "id")
     @ManyToOne
     private Company company;

@@ -8,6 +8,8 @@ import com.company.service.inter.ModelServiceInter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ModelRestController
 {
+
+    public static final Logger LOG = Logger.getLogger(CarsRestController.class.getName());
 
     @Autowired
     private ModelServiceInter modelService;
@@ -71,15 +75,25 @@ public class ModelRestController
             @RequestBody ModelDTO modelDTO
     )
     {
-        Model model = modelService.getByName(modelDTO.getName());
-        if (model != null)
-            if (Objects.equals(model.getCompany().getId(), modelDTO.getCompany().getId()))
-                return ResponseEntity.ok(ResponseDTO.of(modelDTO,
-                        "There is model already with this name and company!"));
+        Model model;
+        try
+        {
+            if (modelDTO.getName().trim().isEmpty())
+                throw new NullPointerException();
+            model = modelService.getByName(modelDTO.getName());
+            if (model != null)
+                if (Objects.equals(model.getCompany().getId(), modelDTO.getCompany().getId()))
+                    return ResponseEntity.ok(ResponseDTO.of(modelDTO,
+                            "There is model already with this name and company!", 409));
 
-        model = new Model();
-        model.setName(modelDTO.getName());
-        model.setCompany(companyService.getById(modelDTO.getCompany().getId()));
+            model = new Model();
+            model.setName(modelDTO.getName());
+            model.setCompany(companyService.getById(modelDTO.getCompany().getId()));
+        } catch (NullPointerException ex)
+        {
+            LOG.log(Level.SEVERE, null, ex);
+            return ResponseEntity.ok(ResponseDTO.of(modelDTO, "Any of properties can not be null!", 409));
+        }
 
         model = modelService.saveModel(model);
 
@@ -92,19 +106,29 @@ public class ModelRestController
             @RequestBody ModelDTO modelDTO
     )
     {
-        Model model = modelService.getById(id);
-        if (model == null)
-            return ResponseEntity.ok(ResponseDTO.of(modelDTO, "Model not found", 404));
+        Model model;
+        try
+        {
+            if (modelDTO.getName().trim().isEmpty())
+                throw new NullPointerException();
+            model = modelService.getById(id);
+            if (model == null)
+                return ResponseEntity.ok(ResponseDTO.of(modelDTO, "Model not found", 404));
 
-        if (modelService.getByName(modelDTO.getName()) != null
-                && !Objects.equals(modelService.getByName(modelDTO.getName()).getId(), id)
-                && Objects.equals(modelService.getByName(modelDTO.getName()).getCompany().getId(),
-                        modelDTO.getCompany().getId()))
-            return ResponseEntity.ok(ResponseDTO.of(modelDTO,
-                    "There is model already with this name and company!", 409));
+            if (modelService.getByName(modelDTO.getName()) != null
+                    && !Objects.equals(modelService.getByName(modelDTO.getName()).getId(), id)
+                    && Objects.equals(modelService.getByName(modelDTO.getName()).getCompany().getId(),
+                            modelDTO.getCompany().getId()))
+                return ResponseEntity.ok(ResponseDTO.of(modelDTO,
+                        "There is model already with this name and company!", 409));
 
-        model.setName(modelDTO.getName());
-        model.setCompany(companyService.getById(modelDTO.getCompany().getId()));
+            model.setName(modelDTO.getName());
+            model.setCompany(companyService.getById(modelDTO.getCompany().getId()));
+        } catch (NullPointerException ex)
+        {
+            LOG.log(Level.SEVERE, null, ex);
+            return ResponseEntity.ok(ResponseDTO.of(modelDTO, "Any of properties can not be null!", 409));
+        }
 
         model = modelService.saveModel(model);
 

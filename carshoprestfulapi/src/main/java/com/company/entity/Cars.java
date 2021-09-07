@@ -33,14 +33,18 @@ public class Cars implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "number")
     private String number;
+    @Basic(optional = false)
     @JoinColumn(name = "model", referencedColumnName = "id")
     @ManyToOne
     private Model model;
+    @Basic(optional = false)
     @JoinColumn(name = "shape", referencedColumnName = "id")
     @ManyToOne
     private Shape shape;
+    @Basic(optional = false)
     @JoinColumn(name = "color", referencedColumnName = "id")
     @ManyToOne
     private Color color;

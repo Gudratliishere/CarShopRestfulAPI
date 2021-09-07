@@ -36,6 +36,7 @@ public class Company implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "name")
     private String name;
     @OneToMany(mappedBy = "company")

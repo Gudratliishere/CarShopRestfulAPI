@@ -7,6 +7,8 @@ import com.company.service.inter.ColorServiceInter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ColorRestController
 {
+
+    public static final Logger LOG = Logger.getLogger(ColorRestController.class.getName());
 
     @Autowired
     private ColorServiceInter colorService;
@@ -68,12 +72,22 @@ public class ColorRestController
             @RequestBody ColorDTO colorDTO
     )
     {
-        Color color = colorService.getByName(colorDTO.getName());
-        if (color != null)
-            return ResponseEntity.ok(ResponseDTO.of(colorDTO, "There is color already with this name!"));
+        Color color;
+        try
+        {
+            if (colorDTO.getName().trim().isEmpty())
+                throw new NullPointerException();
+            color = colorService.getByName(colorDTO.getName());
+            if (color != null)
+                return ResponseEntity.ok(ResponseDTO.of(colorDTO, "There is color already with this name!", 409));
 
-        color = new Color();
-        color.setName(colorDTO.getName());
+            color = new Color();
+            color.setName(colorDTO.getName());
+        } catch (NullPointerException ex)
+        {
+            LOG.log(Level.SEVERE, null, ex);
+            return ResponseEntity.ok(ResponseDTO.of(colorDTO, "Any of properties can not be null!", 409));
+        }
 
         color = colorService.saveColor(color);
 
@@ -86,15 +100,25 @@ public class ColorRestController
             @RequestBody ColorDTO colorDTO
     )
     {
-        Color color = colorService.getById(id);
-        if (color == null)
-            return ResponseEntity.ok(ResponseDTO.of(colorDTO, "Color not found", 404));
+        Color color;
+        try
+        {
+            if (colorDTO.getName().trim().isEmpty())
+                throw new NullPointerException();
+            color = colorService.getById(id);
+            if (color == null)
+                return ResponseEntity.ok(ResponseDTO.of(colorDTO, "Color not found", 404));
 
-        if (colorService.getByName(colorDTO.getName()) != null
-                && !Objects.equals(colorService.getByName(colorDTO.getName()).getId(), id))
-            return ResponseEntity.ok(ResponseDTO.of(colorDTO, "There is color already with this name!", 409));
+            if (colorService.getByName(colorDTO.getName()) != null
+                    && !Objects.equals(colorService.getByName(colorDTO.getName()).getId(), id))
+                return ResponseEntity.ok(ResponseDTO.of(colorDTO, "There is color already with this name!", 409));
 
-        color.setName(colorDTO.getName());
+            color.setName(colorDTO.getName());
+        } catch (NullPointerException ex)
+        {
+            LOG.log(Level.SEVERE, null, ex);
+            return ResponseEntity.ok(ResponseDTO.of(colorDTO, "Any of properties can not be null!", 409));
+        }
 
         color = colorService.saveColor(color);
 

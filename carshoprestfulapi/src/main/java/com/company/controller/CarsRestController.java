@@ -10,6 +10,8 @@ import com.company.service.inter.ShapeServiceInter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CarsRestController
 {
+
+    public static final Logger LOG = Logger.getLogger(CarsRestController.class.getName());
 
     @Autowired
     private CarsServiceInter carsService;
@@ -83,16 +87,27 @@ public class CarsRestController
             @RequestBody CarsDTO carsDTO
     )
     {
-        Cars cars = carsService.getByNumber(carsDTO.getNumber());
-        if (cars == null)
-            cars = new Cars();
-        else
-            return ResponseEntity.ok(ResponseDTO.of(carsDTO, "There is car already with this number!", 409));
+        Cars cars;
+        try
+        {
+            if (carsDTO.getNumber().trim().isEmpty())
+                throw new NullPointerException();
+            cars = carsService.getByNumber(carsDTO.getNumber());
+            if (cars == null)
+                cars = new Cars();
+            else
+                return ResponseEntity.ok(ResponseDTO.of(carsDTO, "There is car already with this number!", 409));
 
-        cars.setNumber(carsDTO.getNumber());
-        cars.setModel(modelService.getById(carsDTO.getModel().getId()));
-        cars.setColor(colorService.getById(carsDTO.getColor().getId()));
-        cars.setShape(shapeService.getById(carsDTO.getShape().getId()));
+            cars.setNumber(carsDTO.getNumber());
+
+            cars.setModel(modelService.getById(carsDTO.getModel().getId()));
+            cars.setColor(colorService.getById(carsDTO.getColor().getId()));
+            cars.setShape(shapeService.getById(carsDTO.getShape().getId()));
+        } catch (NullPointerException ex)
+        {
+            LOG.log(Level.SEVERE, null, ex);
+            return ResponseEntity.ok(ResponseDTO.of(carsDTO, "Any of properties can not be null!", 409));
+        }
 
         cars = carsService.saveCars(cars);
 
@@ -105,18 +120,28 @@ public class CarsRestController
             @RequestBody CarsDTO carsDTO
     )
     {
-        Cars cars = carsService.getById(id);
-        if (cars == null)
-            return ResponseEntity.ok(ResponseDTO.of(carsDTO, "Car not found!", 404));
+        Cars cars;
+        try
+        {
+            if (carsDTO.getNumber().trim().isEmpty())
+                throw new NullPointerException();
+            cars = carsService.getById(id);
+            if (cars == null)
+                return ResponseEntity.ok(ResponseDTO.of(carsDTO, "Car not found!", 404));
 
-        if (carsService.getByNumber(carsDTO.getNumber()) != null
-                && !Objects.equals(carsService.getByNumber(carsDTO.getNumber()).getId(), id))
-            return ResponseEntity.ok(ResponseDTO.of(carsDTO, "There is car already with this number!", 409));
+            if (carsService.getByNumber(carsDTO.getNumber()) != null
+                    && !Objects.equals(carsService.getByNumber(carsDTO.getNumber()).getId(), id))
+                return ResponseEntity.ok(ResponseDTO.of(carsDTO, "There is car already with this number!", 409));
 
-        cars.setNumber(carsDTO.getNumber());
-        cars.setModel(modelService.getById(carsDTO.getModel().getId()));
-        cars.setColor(colorService.getById(carsDTO.getColor().getId()));
-        cars.setShape(shapeService.getById(carsDTO.getShape().getId()));
+            cars.setNumber(carsDTO.getNumber());
+            cars.setModel(modelService.getById(carsDTO.getModel().getId()));
+            cars.setColor(colorService.getById(carsDTO.getColor().getId()));
+            cars.setShape(shapeService.getById(carsDTO.getShape().getId()));
+        } catch (NullPointerException ex)
+        {
+            LOG.log(Level.SEVERE, null, ex);
+            return ResponseEntity.ok(ResponseDTO.of(carsDTO, "Any of properties can not be null!", 409));
+        }
 
         cars = carsService.saveCars(cars);
 
