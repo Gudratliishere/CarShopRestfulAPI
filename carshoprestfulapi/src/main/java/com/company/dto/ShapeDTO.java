@@ -26,4 +26,10 @@ public class ShapeDTO
         
         return shapeDTO;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ShapeDTO{" + "id=" + id + ", form=" + form + '}';
+    }
 }

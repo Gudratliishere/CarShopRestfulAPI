@@ -26,4 +26,10 @@ public class CompanyDTO
 
         return companyDTO;
     }
+
+    @Override
+    public String toString()
+    {
+        return "CompanyDTO{" + "id=" + id + ", name=" + name + '}';
+    }
 }

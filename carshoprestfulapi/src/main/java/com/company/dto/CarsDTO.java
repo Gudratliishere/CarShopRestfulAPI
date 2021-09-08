@@ -39,4 +39,10 @@ public class CarsDTO
         
         return carsDTO;
     }
+
+    @Override
+    public String toString()
+    {
+        return "CarsDTO{" + "id=" + id + ", number=" + number + ", model=" + model + ", color=" + color + ", shape=" + shape + '}';
+    }
 }

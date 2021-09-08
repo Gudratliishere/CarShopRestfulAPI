@@ -28,4 +28,10 @@ public class ModelDTO
         
         return modelDTO;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ModelDTO{" + "id=" + id + ", name=" + name + ", company=" + company + '}';
+    }
 }

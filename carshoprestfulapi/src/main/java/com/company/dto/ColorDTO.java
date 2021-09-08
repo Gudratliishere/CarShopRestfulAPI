@@ -26,4 +26,10 @@ public class ColorDTO
         
         return colorDTO;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ColorDTO{" + "id=" + id + ", name=" + name + '}';
+    }
 }

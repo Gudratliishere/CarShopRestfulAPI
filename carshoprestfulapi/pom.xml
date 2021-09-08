@@ -72,6 +72,12 @@
             <version>3.0.7</version>
             <type>pom</type>
         </dependency>
+        
+        <!--        Spring AOP and Aspect-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
 
     </dependencies>
 
